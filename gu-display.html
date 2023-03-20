@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-  <title>Floral Image Display</title>
+  <title>GU Image Display</title>
   <style>
     /* feel free to style the canvas any way you want. If you want it to
       use the entire window, set width: 100% and height: 100%. */
@@ -35,39 +35,30 @@
 
       // displayPanels() displays three panels with texture-mapped image of floral scene
 
-      function displayPanels(texture, panel) {
-        if(panel == 'L') {
-           // plane geometry with texture-mapped floral image
-           var planeGeom = new THREE.PlaneGeometry(10, 10);
-           var planeMat = new THREE.MeshBasicMaterial({
-             color: 0xffffff,
-             map: texture
-           });
-           var planeMesh = new THREE.Mesh(planeGeom, planeMat);
-           scene.add(planeMesh);
-        }
-        
-        if(panel == 'C') {
-           // plane geometry with texture-mapped floral image
-           var planeGeom = new THREE.PlaneGeometry(10, 10);
-           var planeMat = new THREE.MeshBasicMaterial({
-             color: 0xffffff,
-             map: texture
-           });
-           var planeMesh = new THREE.Mesh(planeGeom, planeMat);
-           scene.add(planeMesh);
-        }
-        
-        if(panel == 'R') {
-           // plane geometry with texture-mapped floral image
-           var planeGeom = new THREE.PlaneGeometry(10, 10);
-           var planeMat = new THREE.MeshBasicMaterial({
-             color: 0xffffff,
-             map: texture
-           });
-           var planeMesh = new THREE.Mesh(planeGeom, planeMat);
-           scene.add(planeMesh);
-        }
+      function displayPanels(texture) {
+        // plane geometry with texture-mapped floral image
+        var planeGeom = new THREE.PlaneGeometry(10, 10);
+        var planeMat = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
+          map: texture[1]
+        });
+        var planeMesh = new THREE.Mesh(planeGeom, planeMat);
+        scene.add(planeMesh);
+
+        // repeat texture mapping on right panel
+        var planemat2 = new THREE.MeshBasicMaterial({color:0xffffff, map: texture[2]})
+        var planeMeshR = new THREE.Mesh(planeGeom, planemat2);
+        var dist = 5 * Math.cos(Math.PI / 4);
+        planeMeshR.position.set(5 + dist, 0, dist);
+        planeMeshR.rotation.y = -Math.PI / 4;
+        scene.add(planeMeshR);
+
+        // repeat texture mapping on left panel
+        var planemat3 = new THREE.MeshBasicMaterial({color:0xffffff, map: texture[0]})
+        var planeMeshL = new THREE.Mesh(planeGeom, planemat3);
+        planeMeshL.position.set(-5 - dist, 0, dist);
+        planeMeshL.rotation.y = Math.PI / 4;
+        scene.add(planeMeshL);
 
         TW.render();    // render the scene
       }
@@ -90,18 +81,8 @@
       // load the relaxation.jpg image (stored in the same folder as this webpage),
       // and when the image load is complete, invoke the anonymous function callback
 
-      loader.load("GU-ISE0.jpg",
-        function (texture, 'L') {
-          displayPanels(texture);
-        });
-        
-      loader.load("GU-ISE1.jpg",
-        function (texture, 'C') {
-          displayPanels(texture);
-        });
-        
-      loader.load("GU-ISE2.jpg",
-        function (texture, 'R') {
+      TW.loadTextures(["/images/GU-ISE0.jpg","/images/GU-ISE1.jpg","/images/GU-ISE2.jpg"],
+        function (texture) {
           displayPanels(texture);
         });
 
